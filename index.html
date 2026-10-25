@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In · CampusGo</title>
+<meta name="description" content="Sign in to CampusGo — everything you need, delivered across campus.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Page-specific tweaks kept local since only this page needs them */
+  .lane-preview-list { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .lane-preview-item {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+  }
+  .lane-preview-item i { font-size: 1rem; color: var(--accent); width: 20px; text-align: center; }
+  .lane-preview-item span { font-size: 0.85rem; opacity: 0.9; }
+  .auth-panel { display: none; flex-direction: column; gap: 16px; }
+  .auth-panel.is-active { display: flex; }
+  .name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .name-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Page loader -->
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<div class="auth-shell">
+
+  <!-- LEFT: brand visual panel -->
+  <aside class="auth-visual">
+    <div class="blob" style="width:220px;height:220px;background:var(--accent);top:-60px;right:-60px;"></div>
+    <div class="blob" style="width:160px;height:160px;background:#fff;bottom:10%;left:-40px;animation-delay:1.5s;"></div>
+
+    <div class="fade-up">
+      <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    </div>
+
+    <div class="fade-up delay-1" style="max-width:420px;">
+      <p class="eyebrow" style="margin-bottom:14px;">Delivered across campus</p>
+      <h1 style="font-size:2.15rem; line-height:1.15; margin-bottom:14px;">
+        Everything you need is closer than your next class.
+      </h1>
+      <p style="opacity:0.85; font-size:0.98rem;">
+        Food, medicines, stationery, and hostel essentials — dropped at your room, block, or classroom door.
+      </p>
+
+      <div class="lane-preview-list">
+        <div class="lane-preview-item"><i class="fa-solid fa-bowl-food"></i><span>Order from 40+ campus & nearby outlets</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-bolt"></i><span>Emergency delivery for medicines & ORS in minutes</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-shield-heart"></i><span>Private, discreet ordering for women's essentials</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-graduation-cap"></i><span>Earn as a verified student delivery partner</span></div>
+      </div>
+    </div>
+
+    <div class="fade-up delay-2 stat-row">
+      <div><div class="num">6,200+</div><div class="lbl">Students onboard</div></div>
+      <div><div class="num">18 min</div><div class="lbl">Avg. delivery time</div></div>
+      <div><div class="num">₹41L+</div><div class="lbl">Earned by partners</div></div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: auth form -->
+  <section class="auth-form-side">
+    <button class="theme-toggle" data-action="toggle-theme" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-moon" data-theme-icon></i>
+    </button>
+
+    <div class="auth-card card fade-up">
+      <div style="text-align:center;">
+        <span class="brand" style="display:none;"></span>
+        <h2 style="font-size:1.4rem;">Welcome to CampusGo</h2>
+        <p class="muted" style="font-size:0.88rem; margin-top:6px;">Sign in with your campus email to continue</p>
+      </div>
+
+      <div class="auth-tabs" role="tablist">
+        <div class="auth-tab-glider" id="tabGlider"></div>
+        <button class="auth-tab is-active" id="tabSignin" role="tab" aria-selected="true">Sign In</button>
+        <button class="auth-tab" id="tabSignup" role="tab" aria-selected="false">Sign Up</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <form class="auth-panel is-active" id="signinPanel" novalidate>
+        <div class="field">
+          <label for="siEmail">Campus email</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input class="input" type="email" id="siEmail" placeholder="you@college.edu" autocomplete="email">
+          </div>
+          <div class="field-error"></div>
+        </div>
+        <div class="field">
+          <label for="siPassword">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input class="input" type="password" id="siPassword" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-visibility" data-toggle-pw="siPassword" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error"></div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:-8px;">
+          <a href="forgot-password.html" class="link-inline" style="font-size:0.82rem;">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="signinBtn">
+          <span class="btn-label">Sign In</span>
+        </button>
+      </form>
+
+      <!-- SIGN UP -->
+      <form class="auth-panel" id="signupPanel" novalidate>
+        <div class="name-row">
+          <div class="field">
+            <label for="suName">Full name</label>
+            <input class="input" type="text" id="suName" placeholder="Aditi Sharma" autocomplete="name">
+            <div class="field-error"></div>
+          </div>
+          <div class="field">
+            <label for="suRole">I am a</label>
+            <select class="select" id="suRole">
+              <option value="student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="delivery">Delivery Partner</option>
+            </select>
+            <div class="field-error"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="suEmail">Campus email</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input class="input" type="email" id="suEmail" placeholder="you@college.edu" autocomplete="email">
+          </div>
+          <div class="field-error"></div>
+        </div>
+        <div class="field">
+          <label for="suPassword">Create password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input class="input" type="password" id="suPassword" placeholder="At least 8 characters" autocomplete="new-password">
+            <button type="button" class="toggle-visibility" data-toggle-pw="suPassword" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="signupBtn">
+          <span class="btn-label">Create Account</span>
+        </button>
+      </form>
+
+      <div class="divider-text">admin or teacher?</div>
+      <a href="admin-login.html" class="btn btn-ghost btn-block btn-sm">
+        <i class="fa-solid fa-user-shield"></i> Continue to Admin / Teacher Portal
+      </a>
+    </div>
+  </section>
+</div>
+
+<script src="main.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

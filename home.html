@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusGo · Order Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="react-hub/react-hub.css">
+</head>
+<body>
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<nav class="app-nav">
+  <div class="wrap">
+    <a href="home.html" class="brand"><span class="brand-badge">CG</span>CampusGo</a>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link is-active"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-chip"><i class="fa-solid fa-wallet"></i> ₹<span id="walletAmount">450</span></span>
+      <button class="nav-icon-btn" aria-label="Notifications">
+        <i class="fa-solid fa-bell"></i><span class="nav-badge">3</span>
+      </button>
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<section class="wrap welcome-band fade-up" style="margin-top:24px;">
+  <div style="position:relative;z-index:1;">
+    <p class="eyebrow" style="color:var(--accent);margin-bottom:4px;">Good to see you</p>
+    <h1 style="font-size:1.7rem;" id="welcomeName">Welcome back!</h1>
+    <span class="location-chip" id="locationChip"><i class="fa-solid fa-location-dot"></i> Your campus spot</span>
+  </div>
+  <div class="quick-actions">
+    <a href="home.html#/restaurants" class="quick-action-btn"><i class="fa-solid fa-bowl-food"></i> Order Food</a>
+    <a href="hostel-essentials.html" class="quick-action-btn"><i class="fa-solid fa-basket-shopping"></i> Essentials</a>
+    <a href="womens-essentials.html" class="quick-action-btn"><i class="fa-solid fa-heart"></i> Private Order</a>
+    <a href="home.html#/track" class="quick-action-btn"><i class="fa-solid fa-location-crosshairs"></i> Track Order</a>
+    <a href="home.html#/orders" class="quick-action-btn"><i class="fa-solid fa-receipt"></i> My Orders</a>
+  </div>
+</section>
+
+<div id="root"></div>
+
+<script src="main.js"></script>
+<script>window.CAMPUSGO_HOME_ALLOWED = CampusGo.requireStep('home');</script>
+<script>
+  window.CAMPUSGO_EMBEDDED_HOME = true;
+  const session = CampusGo.getSession();
+  const onboarding = CampusGo.getOnboarding();
+  document.getElementById('welcomeName').textContent = `Welcome back, ${(session?.name || 'Student').split(' ')[0]}!`;
+  document.getElementById('navAvatar').textContent = (session?.name || 'S').trim()[0].toUpperCase();
+  const locationChip = document.getElementById('locationChip');
+  if (onboarding.lane === 'hostel' && onboarding.hostel) {
+    locationChip.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${onboarding.hostel.name} · Room ${onboarding.hostel.room}`;
+  } else if (onboarding.lane === 'dayscholar' && onboarding.dayscholar) {
+    locationChip.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${onboarding.dayscholar.block} · ${onboarding.dayscholar.room}`;
+  }
+  if (!CampusGo.canAccessWomensEssentials()) {
+    document.querySelectorAll('a[href="womens-essentials.html"]').forEach((link) => {
+      link.classList.add('is-locked');
+      link.setAttribute('aria-disabled', 'true');
+      link.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-lock" style="font-size:0.7rem;"></i>');
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        CampusGo.toast('This is a private, women-only section', 'info');
+      });
+    });
+  }
+</script>
+<nav class="mobile-tabbar">
+  <a href="home.html" class="tabbar-item is-active"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="hostel-essentials.html" class="tabbar-item"><i class="fa-solid fa-bag-shopping"></i>Essentials</a>
+  <a href="womens-essentials.html" class="tabbar-item"><i class="fa-solid fa-heart"></i>Private</a>
+  <a href="partner-landing.html" class="tabbar-item"><i class="fa-solid fa-motorcycle"></i>Earn</a>
+  <a href="home.html#/track" class="tabbar-item"><i class="fa-solid fa-location-crosshairs"></i>Track</a>
+</nav>
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
+<script src="vendor/htm.umd.js"></script>
+<script src="vendor/zustand.js"></script>
+<script src="react-hub/data.js"></script>
+<script src="react-hub/state.js"></script>
+<script src="react-hub/ui.js"></script>
+<script src="react-hub/app.js"></script>
+</body>
+</html>

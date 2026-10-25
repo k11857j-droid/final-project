@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a Partner · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .partner-main { padding: 28px 0 90px; display: flex; flex-direction: column; gap: 36px; }
+  .hero-stats { display: flex; gap: 36px; margin-top: 22px; flex-wrap: wrap; }
+  .badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .badge-pill {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 14px; border-radius: var(--r-pill);
+    font-size: 0.8rem; font-weight: 600;
+  }
+  .leaderboard-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .leaderboard-row:last-child { border-bottom: none; }
+  .rank-badge {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 0.85rem;
+    background: var(--bg-sunken); color: var(--ink-soft);
+  }
+  .rank-badge.gold { background: #F2A93B; color: #241300; }
+  .rank-badge.silver { background: #C9CFCA; color: #101917; }
+  .rank-badge.bronze { background: #D6A26A; color: #241300; }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent is-active"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap partner-main">
+
+  <div class="partner-subnav">
+    <a href="home.html" class="nav-link" style="border-radius:var(--r-pill);"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="partner-landing.html" class="is-active"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    <a href="partner-apply.html">Earnings</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="partner-hero fade-up">
+    <div class="blob" style="width:200px;height:200px;background:var(--accent);top:-50px;right:10%;"></div>
+    <p class="eyebrow" style="color:var(--accent);">Student Earning Program</p>
+    <h1 style="font-size:2rem; max-width:560px; color:#fff; margin-top:10px;">
+      Turn your free periods into real income — deliver across your own campus.
+    </h1>
+    <p style="opacity:0.85; max-width:520px; margin-top:12px; color:#fff; font-size:0.95rem;">
+      No separate app, no strangers' addresses to find — just orders between hostels, blocks, and classrooms you already know your way around.
+    </p>
+    <div class="hero-stats">
+      <div><div class="num" style="color:#fff;">₹6,200</div><div class="lbl" style="color:rgba(255,255,255,0.7);">Avg. monthly earning*</div></div>
+      <div><div class="num" style="color:#fff;">₹35–₹60</div><div class="lbl" style="color:rgba(255,255,255,0.7);">Per delivery</div></div>
+      <div><div class="num" style="color:#fff;">1,140+</div><div class="lbl" style="color:rgba(255,255,255,0.7);">Active student partners</div></div>
+    </div>
+    <div class="badge-row">
+      <span class="badge-pill"><i class="fa-solid fa-clock"></i> Work only during your free hours</span>
+      <span class="badge-pill"><i class="fa-solid fa-shield-check"></i> Verified-partner badge</span>
+      <span class="badge-pill"><i class="fa-solid fa-wallet"></i> Instant wallet payouts</span>
+    </div>
+    <a href="partner-apply.html" class="btn btn-accent" style="margin-top:26px;">
+      <i class="fa-solid fa-pen"></i> Apply to Become a Partner
+    </a>
+  </section>
+
+  <!-- EARNINGS CALCULATOR -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.15rem;">Estimate your earnings</h2></div>
+    <div class="card earn-calc-card fade-up">
+      <div class="earn-calc-inputs">
+        <div class="range-row">
+          <label>Deliveries per day: <span class="range-value" id="delivVal">4</span></label>
+          <input type="range" id="delivRange" min="1" max="15" value="4">
+        </div>
+        <div class="range-row">
+          <label>Days active per week: <span class="range-value" id="daysVal">5</span></label>
+          <input type="range" id="daysRange" min="1" max="7" value="5">
+        </div>
+        <div class="range-row">
+          <label>Avg. earning per delivery (₹): <span class="range-value" id="rateVal">45</span></label>
+          <input type="range" id="rateRange" min="30" max="70" value="45">
+        </div>
+      </div>
+      <div class="earn-calc-result">
+        <span style="font-size:0.8rem; opacity:0.85;">Estimated earning</span>
+        <div style="font-family:var(--font-display); font-size:2.1rem; font-weight:800;" id="weeklyEarn">₹900</div>
+        <span style="font-size:0.82rem; opacity:0.9;">per week</span>
+        <div style="height:1px; background:rgba(255,255,255,0.25); margin:10px 0;"></div>
+        <span style="font-size:0.8rem; opacity:0.85;">That's about</span>
+        <div style="font-family:var(--font-display); font-size:1.3rem; font-weight:700;" id="monthlyEarn">₹3,900 / month</div>
+      </div>
+    </div>
+    <p class="faint" style="font-size:0.72rem; margin-top:8px;">*Estimates only — actual earnings vary with order volume, distance, and campus demand.</p>
+  </section>
+
+  <!-- WHY DELIVER WITH CAMPUSGO -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.15rem;">Why students choose CampusGo</h2></div>
+    <div class="benefit-grid">
+      <div class="card benefit-card fade-up">
+        <i class="fa-solid fa-clock"></i>
+        <strong>Flexible hours</strong>
+        <p class="muted" style="font-size:0.85rem; margin-top:4px;">Go online only during free periods — no fixed shifts, no pressure.</p>
+      </div>
+      <div class="card benefit-card fade-up delay-1">
+        <i class="fa-solid fa-route"></i>
+        <strong>Short campus routes</strong>
+        <p class="muted" style="font-size:0.85rem; margin-top:4px;">Every delivery is within your own campus — most trips take under 10 minutes on foot.</p>
+      </div>
+      <div class="card benefit-card fade-up delay-2">
+        <i class="fa-solid fa-trophy"></i>
+        <strong>Leaderboard & badges</strong>
+        <p class="muted" style="font-size:0.85rem; margin-top:4px;">Top partners get priority orders, bonus payouts, and a spot on the campus leaderboard.</p>
+      </div>
+      <div class="card benefit-card fade-up delay-3">
+        <i class="fa-solid fa-wallet"></i>
+        <strong>Instant wallet credit</strong>
+        <p class="muted" style="font-size:0.85rem; margin-top:4px;">Earnings land in your CampusGo wallet the moment a delivery is marked complete.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD PREVIEW -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.15rem;">This week's top partners</h2></div>
+    <div class="card fade-up">
+      <div class="leaderboard-row">
+        <span class="rank-badge gold">1</span>
+        <div style="flex:1;"><strong>Rohan Verma</strong><div class="faint" style="font-size:0.78rem;">62 deliveries · 4.9 ★</div></div>
+        <strong style="color:var(--primary);">₹2,840</strong>
+      </div>
+      <div class="leaderboard-row">
+        <span class="rank-badge silver">2</span>
+        <div style="flex:1;"><strong>Ishita Rao</strong><div class="faint" style="font-size:0.78rem;">54 deliveries · 4.8 ★</div></div>
+        <strong style="color:var(--primary);">₹2,430</strong>
+      </div>
+      <div class="leaderboard-row">
+        <span class="rank-badge bronze">3</span>
+        <div style="flex:1;"><strong>Kabir Singh</strong><div class="faint" style="font-size:0.78rem;">49 deliveries · 4.7 ★</div></div>
+        <strong style="color:var(--primary);">₹2,205</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.15rem;">How it works</h2></div>
+    <div class="benefit-grid">
+      <div class="card benefit-card fade-up"><i class="fa-solid fa-file-pen"></i><strong>1. Apply</strong><p class="muted" style="font-size:0.85rem;margin-top:4px;">Share your details and college ID for verification.</p></div>
+      <div class="card benefit-card fade-up delay-1"><i class="fa-solid fa-user-check"></i><strong>2. Get verified</strong><p class="muted" style="font-size:0.85rem;margin-top:4px;">Our team reviews and approves your application, usually within a day.</p></div>
+      <div class="card benefit-card fade-up delay-2"><i class="fa-solid fa-list-check"></i><strong>3. Accept orders</strong><p class="muted" style="font-size:0.85rem;margin-top:4px;">Browse nearby orders and accept the ones that fit your schedule.</p></div>
+      <div class="card benefit-card fade-up delay-3"><i class="fa-solid fa-sack-dollar"></i><strong>4. Get paid</strong><p class="muted" style="font-size:0.85rem;margin-top:4px;">Earnings credit instantly to your wallet after each delivery.</p></div>
+    </div>
+  </section>
+
+  <div style="text-align:center; padding: 20px 0;">
+    <a href="partner-apply.html" class="btn btn-primary" style="padding:16px 34px; font-size:1rem;">
+      Start Your Application <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+
+</main>
+
+<nav class="mobile-tabbar">
+  <a href="home.html" class="tabbar-item"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="hostel-essentials.html" class="tabbar-item"><i class="fa-solid fa-bag-shopping"></i>Essentials</a>
+  <a href="womens-essentials.html" class="tabbar-item"><i class="fa-solid fa-heart"></i>Private</a>
+  <a href="partner-landing.html" class="tabbar-item is-active"><i class="fa-solid fa-motorcycle"></i>Earn</a>
+  <a href="profile.html" class="tabbar-item"><i class="fa-solid fa-user"></i>Profile</a>
+</nav>
+
+<script src="main.js"></script>
+<script>
+  // Personalize avatar initial
+  const s = CampusGo.getSession();
+  if (s) document.getElementById('navAvatar').textContent = s.name.trim()[0].toUpperCase();
+
+  // Earnings calculator
+  const delivRange = document.getElementById('delivRange');
+  const daysRange = document.getElementById('daysRange');
+  const rateRange = document.getElementById('rateRange');
+
+  function updateCalc() {
+    const deliv = Number(delivRange.value);
+    const days = Number(daysRange.value);
+    const rate = Number(rateRange.value);
+    document.getElementById('delivVal').textContent = deliv;
+    document.getElementById('daysVal').textContent = days;
+    document.getElementById('rateVal').textContent = rate;
+
+    const weekly = deliv * days * rate;
+    document.getElementById('weeklyEarn').textContent = `₹${weekly.toLocaleString('en-IN')}`;
+    document.getElementById('monthlyEarn').textContent = `₹${(weekly * 4).toLocaleString('en-IN')} / month`;
+  }
+  [delivRange, daysRange, rateRange].forEach((r) => r.addEventListener('input', updateCalc));
+  updateCalc();
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin / Teacher Portal · CampusGo</title>
+<meta name="description" content="Admin and teacher sign in for CampusGo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .lane-preview-list { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .lane-preview-item {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+  }
+  .lane-preview-item i { font-size: 1rem; color: var(--accent); width: 20px; text-align: center; }
+  .lane-preview-item span { font-size: 0.85rem; opacity: 0.9; }
+  .role-select-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .role-pill {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1.5px solid var(--border-strong); border-radius: var(--r-md);
+    padding: 10px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: all var(--t-fast);
+  }
+  .role-pill i { font-size: 0.9rem; }
+  .role-pill.is-selected { border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark); }
+  @media (max-width: 420px) { .role-select-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<div class="auth-shell">
+
+  <!-- LEFT: brand visual panel -->
+  <aside class="auth-visual">
+    <div class="blob" style="width:220px;height:220px;background:var(--accent);top:-60px;right:-60px;"></div>
+    <div class="blob" style="width:160px;height:160px;background:#fff;bottom:10%;left:-40px;animation-delay:1.5s;"></div>
+
+    <div class="fade-up">
+      <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    </div>
+
+    <div class="fade-up delay-1" style="max-width:420px;">
+      <p class="eyebrow" style="margin-bottom:14px;">Admin & Teacher Portal</p>
+      <h1 style="font-size:2.15rem; line-height:1.15; margin-bottom:14px;">
+        Manage campus operations from one dashboard.
+      </h1>
+      <p style="opacity:0.85; font-size:0.98rem;">
+        Oversee delivery partners, monitor emergency requests, and manage hostel & essentials listings across campus.
+      </p>
+
+      <div class="lane-preview-list">
+        <div class="lane-preview-item"><i class="fa-solid fa-chart-line"></i><span>Live view of orders, partners, and requests</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-user-shield"></i><span>Verify student & partner college IDs</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-triangle-exclamation"></i><span>Respond to emergency medicine requests</span></div>
+        <div class="lane-preview-item"><i class="fa-solid fa-boxes-stacked"></i><span>Manage hostel & essentials inventory</span></div>
+      </div>
+    </div>
+
+    <div class="fade-up delay-2 stat-row">
+      <div><div class="num">6,200+</div><div class="lbl">Students onboard</div></div>
+      <div><div class="num">18 min</div><div class="lbl">Avg. delivery time</div></div>
+      <div><div class="num">₹41L+</div><div class="lbl">Earned by partners</div></div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: auth form -->
+  <section class="auth-form-side">
+    <button class="theme-toggle" data-action="toggle-theme" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-moon" data-theme-icon></i>
+    </button>
+
+    <div class="auth-card card fade-up">
+      <div style="text-align:center;">
+        <h2 style="font-size:1.4rem;">Admin / Teacher Sign In</h2>
+        <p class="muted" style="font-size:0.88rem; margin-top:6px;">Sign in with your staff credentials to continue</p>
+      </div>
+
+      <form id="adminLoginForm" novalidate style="display:flex; flex-direction:column; gap:16px;">
+        <div class="field">
+          <label>I am signing in as a</label>
+          <div class="role-select-row" id="roleSelectRow">
+            <div class="role-pill is-selected" data-role="admin"><i class="fa-solid fa-user-shield"></i> Admin</div>
+            <div class="role-pill" data-role="teacher"><i class="fa-solid fa-chalkboard-user"></i> Teacher</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="alEmail">Staff email</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input class="input" type="email" id="alEmail" placeholder="you@college.edu" autocomplete="email">
+          </div>
+          <div class="field-error"></div>
+        </div>
+
+        <div class="field">
+          <label for="alPassword">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input class="input" type="password" id="alPassword" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="toggle-visibility" data-toggle-pw="alPassword" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error"></div>
+        </div>
+
+        <div class="field">
+          <label for="alStaffId">Staff / Employee ID</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-id-badge"></i>
+            <input class="input" type="text" id="alStaffId" placeholder="e.g. STF-2045">
+          </div>
+          <div class="field-error"></div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:-8px;">
+          <a href="forgot-password.html" class="link-inline" style="font-size:0.82rem;">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="adminLoginBtn">
+          <span class="btn-label">Sign In</span>
+        </button>
+      </form>
+
+      <div class="divider-text">not staff?</div>
+      <a href="index.html" class="btn btn-ghost btn-block btn-sm">
+        <i class="fa-solid fa-arrow-left"></i> Back to Student Sign In
+      </a>
+    </div>
+  </section>
+</div>
+
+<script src="main.js"></script>
+<script src="admin-login.js"></script>
+</body>
+</html>

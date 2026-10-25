@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify College ID · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .onboard-shell {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px 60px;
+  }
+  .onboard-header { width: 100%; max-width: 460px; margin-bottom: 34px; }
+  .onboard-card { width: 100%; max-width: 460px; padding: 34px; display: flex; flex-direction: column; gap: 22px; }
+  .id-card-preview {
+    border-radius: var(--r-lg);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-elevated);
+  }
+  .id-card-preview::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 100% at 100% 0%, rgba(255,255,255,0.18), transparent 60%);
+  }
+  .id-card-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+  .id-card-chip { width: 34px; height: 26px; border-radius: 6px; background: rgba(255,255,255,0.35); }
+  .id-card-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; margin-top: 22px; position: relative; z-index: 1; }
+  .id-card-meta { display: flex; justify-content: space-between; margin-top: 16px; font-family: var(--font-mono); font-size: 0.78rem; opacity: 0.9; position: relative; z-index: 1; }
+  .id-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.76rem; font-weight: 700;
+    padding: 4px 10px; border-radius: var(--r-pill);
+    background: rgba(255,255,255,0.18);
+  }
+  .otp-help { text-align: center; font-size: 0.82rem; }
+  .upload-box {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--r-md);
+    padding: 22px;
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 0.85rem;
+    transition: border-color var(--t-fast);
+    cursor: pointer;
+  }
+  .upload-box:hover { border-color: var(--primary); color: var(--primary); }
+  .upload-box.has-file { border-color: var(--success); color: var(--success); background: var(--primary-soft); }
+  .step-panel { display: none; flex-direction: column; gap: 20px; }
+  .step-panel.is-active { display: flex; }
+  .success-check {
+    width: 74px; height: 74px; border-radius: 50%;
+    background: var(--primary-soft); color: var(--primary);
+    display: grid; place-items: center; margin: 0 auto;
+    font-size: 2rem; animation: pop-in 480ms var(--ease-spring);
+  }
+  @keyframes pop-in { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<button class="theme-toggle" data-action="toggle-theme" aria-label="Toggle dark mode">
+  <i class="fa-solid fa-moon" data-theme-icon></i>
+</button>
+
+<div class="onboard-shell">
+  <div class="onboard-header">
+    <div style="text-align:center; margin-bottom:28px;">
+      <span class="brand" style="justify-content:center;"><span class="brand-badge">CG</span>CampusGo</span>
+    </div>
+
+    <!-- Route rail: Account -> Verify ID -> Your Spot -->
+    <div class="route-rail" style="--fill:50%;">
+      <div class="route-step is-done">
+        <div class="route-node"><i class="fa-solid fa-check" style="font-size:0.7rem;"></i></div>
+        <span class="route-label">Account</span>
+      </div>
+      <div class="route-line" style="position:relative;">
+        <span class="route-pin" style="--pin:50%;">🛵</span>
+      </div>
+      <div class="route-step is-active">
+        <div class="route-node">2</div>
+        <span class="route-label">Verify ID</span>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-step">
+        <div class="route-node">3</div>
+        <span class="route-label">Your Spot</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="onboard-card card fade-up">
+
+    <!-- STEP A: enter college ID -->
+    <div class="step-panel is-active" id="panelEnterId">
+      <div style="text-align:center;">
+        <h2 style="font-size:1.3rem;">Verify your college ID</h2>
+        <p class="muted" style="font-size:0.85rem; margin-top:6px;">
+          This confirms you're a real member of campus — required before you can order or deliver.
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="collegeId">College roll number</label>
+        <div class="input-icon-wrap">
+          <i class="fa-solid fa-id-card"></i>
+          <input class="input" type="text" id="collegeId" placeholder="e.g. 21BCE1042">
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="genderSelect">Gender</label>
+        <div class="input-icon-wrap">
+          <i class="fa-solid fa-venus-mars"></i>
+          <select class="input" id="genderSelect">
+            <option value="" selected disabled>Select…</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="other">Other / Prefer not to say</option>
+          </select>
+        </div>
+        <div class="field-error"></div>
+        <p class="muted" style="font-size:0.78rem; margin-top:2px;">
+          <i class="fa-solid fa-lock" style="font-size:0.7rem;"></i>
+          Used only to unlock the private Women's Essentials section — never shown on your public profile.
+        </p>
+      </div>
+
+      <div class="field">
+        <label>Upload ID card photo (front)</label>
+        <div class="upload-box" id="uploadBox">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.4rem; display:block; margin-bottom:6px;"></i>
+          <span id="uploadLabel">Tap to upload, or drag a photo here</span>
+          <input type="file" id="uploadInput" accept="image/*" hidden>
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="sendOtpBtn">
+        <span class="btn-label">Send OTP to my campus email</span>
+      </button>
+    </div>
+
+    <!-- STEP B: OTP -->
+    <div class="step-panel" id="panelOtp">
+      <div style="text-align:center;">
+        <h2 style="font-size:1.3rem;">Enter the OTP</h2>
+        <p class="muted" style="font-size:0.85rem; margin-top:6px;" id="otpSentTo">
+          We've sent a 4-digit code to your campus email.
+        </p>
+      </div>
+
+      <div class="otp-row">
+        <input class="otp-box" maxlength="1" inputmode="numeric" data-otp="0">
+        <input class="otp-box" maxlength="1" inputmode="numeric" data-otp="1">
+        <input class="otp-box" maxlength="1" inputmode="numeric" data-otp="2">
+        <input class="otp-box" maxlength="1" inputmode="numeric" data-otp="3">
+      </div>
+      <div class="field-error" style="text-align:center;" id="otpError"></div>
+
+      <p class="otp-help muted">
+        Didn't get it? <button type="button" class="link-inline" id="resendOtp" style="background:none;border:none;font-weight:600;">Resend code</button>
+      </p>
+
+      <button class="btn btn-primary btn-block" id="verifyOtpBtn">
+        <span class="btn-label">Verify & Continue</span>
+      </button>
+    </div>
+
+    <!-- STEP C: success -->
+    <div class="step-panel" id="panelSuccess">
+      <div class="success-check"><i class="fa-solid fa-check"></i></div>
+      <div style="text-align:center;">
+        <h2 style="font-size:1.25rem;">ID verified!</h2>
+        <p class="muted" style="font-size:0.85rem; margin-top:6px;">
+          Now let's find your spot on campus so deliveries reach exactly the right door.
+        </p>
+      </div>
+      <div class="id-card-preview">
+        <div class="id-card-top">
+          <span style="font-family:var(--font-display); font-weight:700; font-size:0.9rem;">CampusGo ID</span>
+          <span class="id-status"><i class="fa-solid fa-shield-check"></i> Verified</span>
+        </div>
+        <div class="id-card-name" id="previewName">Student Name</div>
+        <div class="id-card-meta">
+          <span id="previewId">ID: —</span>
+          <span>Valid thru 2027</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="continueBtn">
+        <span class="btn-label">Continue to Campus Setup</span> <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script src="verify-id.js"></script>
+</body>
+</html>

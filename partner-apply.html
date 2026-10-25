@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply as Delivery Partner · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .apply-main { padding: 28px 0 90px; display: flex; justify-content: center; }
+  .apply-card { width: 100%; max-width: 560px; padding: 34px; display: flex; flex-direction: column; gap: 22px; }
+  .slot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (max-width: 480px) { .slot-grid { grid-template-columns: 1fr; } }
+  .slot-chip {
+    display: flex; align-items: center; gap: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    font-size: 0.84rem; font-weight: 600;
+    cursor: pointer;
+  }
+  .slot-chip input { accent-color: var(--primary); width: 16px; height: 16px; }
+  .slot-chip.is-checked { border-color: var(--primary); background: var(--primary-soft); }
+  .step-panel { display: none; flex-direction: column; gap: 20px; }
+  .step-panel.is-active { display: flex; }
+  .success-check {
+    width: 74px; height: 74px; border-radius: 50%;
+    background: var(--primary-soft); color: var(--primary);
+    display: grid; place-items: center; margin: 0 auto;
+    font-size: 2rem;
+  }
+  .upload-box {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--r-md);
+    padding: 22px;
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .upload-box.has-file { border-color: var(--success); color: var(--success); background: var(--primary-soft); }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent is-active"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" data-theme-icon></i></button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap apply-main">
+  <div class="card apply-card fade-up">
+
+    <!-- FORM -->
+    <div class="step-panel is-active" id="panelForm">
+      <div style="text-align:center;">
+        <h2 style="font-size:1.35rem;">Apply to become a delivery partner</h2>
+        <p class="muted" style="font-size:0.85rem; margin-top:6px;">Takes about 2 minutes. Most applications are reviewed within a day.</p>
+      </div>
+
+      <div class="field">
+        <label for="apName">Full name</label>
+        <input class="input" type="text" id="apName" placeholder="As on your college ID">
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="apCollegeId">College ID</label>
+        <input class="input" type="text" id="apCollegeId" placeholder="e.g. 21BCE1042">
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="apPhone">Phone number</label>
+        <div class="input-icon-wrap">
+          <i class="fa-solid fa-phone"></i>
+          <input class="input" type="tel" id="apPhone" placeholder="10-digit mobile number">
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <div class="field">
+        <label>Available hours (select all that apply)</label>
+        <div class="slot-grid">
+          <label class="slot-chip"><input type="checkbox" value="morning"> Morning (8–11 AM)</label>
+          <label class="slot-chip"><input type="checkbox" value="lunch"> Lunch break (12–2 PM)</label>
+          <label class="slot-chip"><input type="checkbox" value="afternoon"> Afternoon (3–5 PM)</label>
+          <label class="slot-chip"><input type="checkbox" value="evening"> Evening (6–9 PM)</label>
+        </div>
+        <div class="field-error" id="slotError"></div>
+      </div>
+
+      <div class="field">
+        <label>Upload photo ID (front)</label>
+        <div class="upload-box" id="uploadBox">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.4rem; display:block; margin-bottom:6px;"></i>
+          <span id="uploadLabel">Tap to upload your college ID photo</span>
+          <input type="file" id="uploadInput" accept="image/*" hidden>
+        </div>
+        <div class="field-error"></div>
+      </div>
+
+      <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.8rem; color:var(--ink-soft);">
+        <input type="checkbox" id="apDeclare" style="margin-top:3px; accent-color:var(--primary);">
+        I confirm I'm physically able to walk or cycle around campus to complete deliveries, and the details above are accurate.
+      </label>
+      <div class="field-error" id="declareError"></div>
+
+      <button class="btn btn-primary btn-block" id="submitApplyBtn">
+        <span class="btn-label">Submit Application</span>
+      </button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step-panel" id="panelSuccess">
+      <div class="success-check"><i class="fa-solid fa-check"></i></div>
+      <div style="text-align:center;">
+        <h2 style="font-size:1.25rem;">Application submitted!</h2>
+        <p class="muted" style="font-size:0.88rem; margin-top:8px;">
+          We're reviewing your details now — you'll get a notification once you're verified.
+          Most students hear back within 24 hours.
+        </p>
+      </div>
+      <a href="home.html" class="btn btn-primary btn-block">Back to Home</a>
+      <a href="partner-landing.html" class="btn btn-ghost btn-block">View Partner Program</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="main.js"></script>
+<script src="partner.js"></script>
+</body>
+</html>

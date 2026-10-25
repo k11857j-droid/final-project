@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Set Up Your Spot · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .onboard-shell { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 60px; }
+  .onboard-header { width: 100%; max-width: 480px; margin-bottom: 34px; }
+  .onboard-card { width: 100%; max-width: 480px; padding: 34px; display: flex; flex-direction: column; gap: 22px; }
+  .lane-details { display: none; flex-direction: column; gap: 16px; }
+  .lane-details.is-active { display: flex; animation: fadeUp var(--t-med) var(--ease-out) both; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .two-col { grid-template-columns: 1fr; } }
+  .map-hint {
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.82rem; color: var(--ink-soft);
+    background: var(--bg-sunken);
+  }
+  .map-hint i { color: var(--primary); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+<button class="theme-toggle" data-action="toggle-theme" aria-label="Toggle dark mode">
+  <i class="fa-solid fa-moon" data-theme-icon></i>
+</button>
+
+<div class="onboard-shell">
+  <div class="onboard-header">
+    <div style="text-align:center; margin-bottom:28px;">
+      <span class="brand" style="justify-content:center;"><span class="brand-badge">CG</span>CampusGo</span>
+    </div>
+
+    <div class="route-rail" style="--fill:100%;">
+      <div class="route-step is-done">
+        <div class="route-node"><i class="fa-solid fa-check" style="font-size:0.7rem;"></i></div>
+        <span class="route-label">Account</span>
+      </div>
+      <div class="route-line" style="position:relative;">
+        <span class="route-pin" style="--pin:100%;">🛵</span>
+      </div>
+      <div class="route-step is-done">
+        <div class="route-node"><i class="fa-solid fa-check" style="font-size:0.7rem;"></i></div>
+        <span class="route-label">Verify ID</span>
+      </div>
+      <div class="route-line" style="--fill:100%;"></div>
+      <div class="route-step is-active">
+        <div class="route-node">3</div>
+        <span class="route-label">Your Spot</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="onboard-card card fade-up">
+    <div style="text-align:center;">
+      <h2 style="font-size:1.3rem;">Where should we deliver?</h2>
+      <p class="muted" style="font-size:0.85rem; margin-top:6px;">
+        This unlocks ordering — every delivery partner will see this exact spot.
+      </p>
+    </div>
+
+    <div class="lane-select">
+      <button type="button" class="lane-option" id="laneHostel">
+        <i class="fa-solid fa-building-user"></i>
+        <strong>Hosteler</strong>
+        <span>I live on campus</span>
+      </button>
+      <button type="button" class="lane-option" id="laneDay">
+        <i class="fa-solid fa-person-walking-arrow-right"></i>
+        <strong>Day Scholar</strong>
+        <span>I commute in daily</span>
+      </button>
+    </div>
+
+    <!-- HOSTELER details -->
+    <div class="lane-details" id="detailsHostel">
+      <div class="field">
+        <label for="hostelName">Hostel name / block</label>
+        <select class="select" id="hostelName">
+          <option value="">Select hostel</option>
+          <option>Aravali Hostel (Boys)</option>
+          <option>Nilgiri Hostel (Boys)</option>
+          <option>Shivalik Hostel (Girls)</option>
+          <option>Vindhya Hostel (Girls)</option>
+          <option>Satpura PG Block</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+      <div class="two-col">
+        <div class="field">
+          <label for="hostelFloor">Floor</label>
+          <input class="input" type="text" id="hostelFloor" placeholder="e.g. 2nd Floor">
+          <div class="field-error"></div>
+        </div>
+        <div class="field">
+          <label for="hostelRoom">Room number</label>
+          <input class="input" type="text" id="hostelRoom" placeholder="e.g. 214-B">
+          <div class="field-error"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="hostelNotes">Delivery note (optional)</label>
+        <input class="input" type="text" id="hostelNotes" placeholder="e.g. Leave at warden's desk if I'm not in">
+      </div>
+    </div>
+
+    <!-- DAY SCHOLAR details -->
+    <div class="lane-details" id="detailsDay">
+      <div class="field">
+        <label for="dayBlock">Academic building / block</label>
+        <select class="select" id="dayBlock">
+          <option value="">Select building</option>
+          <option>Block A — Engineering</option>
+          <option>Block B — Sciences</option>
+          <option>Block C — Management</option>
+          <option>Central Library</option>
+          <option>Faculty & Admin Block</option>
+        </select>
+        <div class="field-error"></div>
+      </div>
+      <div class="two-col">
+        <div class="field">
+          <label for="dayFloor">Floor</label>
+          <input class="input" type="text" id="dayFloor" placeholder="e.g. Ground Floor">
+          <div class="field-error"></div>
+        </div>
+        <div class="field">
+          <label for="dayRoom">Classroom / lab number</label>
+          <input class="input" type="text" id="dayRoom" placeholder="e.g. LT-104">
+          <div class="field-error"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="dayFreePeriod">Usual free period (for scheduled orders)</label>
+        <select class="select" id="dayFreePeriod">
+          <option value="">Select a slot</option>
+          <option>10:00 – 11:00 AM</option>
+          <option>12:00 – 1:00 PM (Lunch)</option>
+          <option>2:00 – 3:00 PM</option>
+          <option>4:00 – 5:00 PM</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="map-hint" id="mapHint" style="display:none;">
+      <i class="fa-solid fa-map-location-dot"></i>
+      <span>Your delivery partner will follow the shortest campus route to this exact spot.</span>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="finishSetupBtn" disabled>
+      <span class="btn-label">Unlock CampusGo</span> <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script src="setup-location.js"></script>
+</body>
+</html>

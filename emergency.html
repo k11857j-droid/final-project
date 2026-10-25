@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .em-main { padding: 28px 0 100px; display: flex; flex-direction: column; gap: 32px; }
+
+  .em-hero {
+    border-radius: var(--r-xl);
+    background: linear-gradient(135deg, var(--danger) 0%, #8A241C 100%);
+    color: #fff;
+    padding: 34px;
+    display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .em-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 100% at 100% 0%, rgba(255,255,255,0.16), transparent 60%);
+  }
+  .em-hero-text { position: relative; z-index: 1; max-width: 460px; }
+  .em-hero-text .eyebrow { color: #FBD6D1; }
+  .em-hero-text h1 { font-size: 1.6rem; margin: 6px 0 8px; }
+  .em-eta-badge {
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28);
+    border-radius: var(--r-md); padding: 16px 20px; text-align: center; min-width: 130px;
+  }
+  .em-eta-badge strong { display: block; font-size: 1.6rem; font-family: var(--font-display); }
+  .em-eta-badge span { font-size: 0.75rem; opacity: 0.9; }
+
+
+  .sos-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .sos-card {
+    display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: var(--r-md);
+    text-decoration: none; color: var(--ink); transition: transform var(--t-fast), box-shadow var(--t-fast);
+  }
+  .sos-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-elevated); }
+  .sos-icon {
+    width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 1.15rem; flex: 0 0 auto; color: #fff;
+  }
+  .sos-card strong { display: block; font-size: 0.9rem; }
+  .sos-card span { font-size: 0.78rem; color: var(--ink-faint); }
+
+  /* ---- Category cards ---- */
+  .em-cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .em-cat-card {
+    padding: 20px; border-radius: var(--r-lg); cursor: pointer;
+    transition: transform var(--t-fast), box-shadow var(--t-fast);
+  }
+  .em-cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-elevated); }
+  .em-cat-card.is-active { border-color: var(--danger); box-shadow: 0 0 0 2px var(--danger-soft) inset; }
+  .em-cat-card i.cat-icon {
+    width: 44px; height: 44px; border-radius: var(--r-md); display: grid; place-items: center;
+    background: var(--danger-soft); color: var(--danger); font-size: 1.1rem; margin-bottom: 10px;
+  }
+  .em-cat-card h3 { font-size: 0.95rem; margin-bottom: 4px; }
+  .em-cat-card p { font-size: 0.78rem; color: var(--ink-faint); }
+
+  /* ---- Product grid (reuses r-card pattern) ---- */
+  .em-cover { height: 128px; background-size: cover; background-position: center; }
+  .em-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .em-name { font-family: var(--font-display); font-weight: 700; font-size: 0.94rem; }
+  .em-tags { font-size: 0.76rem; color: var(--ink-faint); }
+  .em-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .em-price { font-family: var(--font-mono); font-weight: 600; }
+  .em-add-btn {
+    border: none; background: var(--danger); color: #fff;
+    padding: 7px 14px; border-radius: var(--r-pill); font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: transform var(--t-fast);
+  }
+  .em-add-btn:active { transform: scale(0.94); }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<!-- ============ APP NAV ============ -->
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="emergency.html" class="nav-link is-active"><i class="fa-solid fa-truck-medical"></i> Emergency</a>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-chip"><i class="fa-solid fa-wallet"></i> ₹<span id="walletAmount">450</span></span>
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap em-main">
+
+  <!-- ============ HERO ============ -->
+  <section class="em-hero fade-up">
+    <div class="em-hero-text">
+      <p class="eyebrow">24×7 · Fastest lane on campus</p>
+      <h1>Emergency Delivery</h1>
+      <p>Medicines, first aid, and urgent essentials — routed to the nearest verified partner first, day or night.</p>
+    </div>
+    <div class="em-eta-badge">
+      <strong>~12 min</strong>
+      <span>avg. emergency ETA</span>
+    </div>
+  </section>
+
+  <!-- ============ SOS STRIP ============ -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.1rem;">Need help right now?</h2></div>
+    <div class="sos-strip">
+      <a class="sos-card card" href="tel:108">
+        <span class="sos-icon" style="background:var(--danger);"><i class="fa-solid fa-truck-medical"></i></span>
+        <span><strong>Call Ambulance</strong><span>National emergency · 108</span></span>
+      </a>
+      <a class="sos-card card" href="tel:100">
+        <span class="sos-icon" style="background:var(--info);"><i class="fa-solid fa-shield-halved"></i></span>
+        <span><strong>Campus Security</strong><span>On-call 24×7</span></span>
+      </a>
+      <a class="sos-card card" href="tel:112">
+        <span class="sos-icon" style="background:var(--accent-dark);"><i class="fa-solid fa-house-medical"></i></span>
+        <span><strong>Campus Health Center</strong><span>Front desk · all hours</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.1rem;">Browse by need</h2></div>
+    <div class="em-cat-grid" id="emCatGrid">
+      <div class="em-cat-card card" data-cat="firstaid">
+        <i class="fa-solid fa-suitcase-medical cat-icon"></i>
+        <h3>First Aid</h3>
+        <p>Bandages, antiseptic, sprays</p>
+      </div>
+      <div class="em-cat-card card" data-cat="fever">
+        <i class="fa-solid fa-thermometer cat-icon"></i>
+        <h3>Fever &amp; Pain Relief</h3>
+        <p>Paracetamol, thermometers</p>
+      </div>
+      <div class="em-cat-card card" data-cat="hydration">
+        <i class="fa-solid fa-glass-water cat-icon"></i>
+        <h3>ORS &amp; Hydration</h3>
+        <p>Rehydration salts, electrolytes</p>
+      </div>
+      <div class="em-cat-card card" data-cat="respiratory">
+        <i class="fa-solid fa-lungs cat-icon"></i>
+        <h3>Cold &amp; Respiratory</h3>
+        <p>Inhalers, cough syrup, steam</p>
+      </div>
+      <div class="em-cat-card card" data-cat="womens">
+        <i class="fa-solid fa-heart cat-icon"></i>
+        <h3>Women's Emergency Kit</h3>
+        <p>Discreet · see Women's Essentials</p>
+      </div>
+      <div class="em-cat-card card" data-cat="eyecare">
+        <i class="fa-solid fa-eye cat-icon"></i>
+        <h3>Eye &amp; Wound Care</h3>
+        <p>Drops, saline, dressings</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCTS ============ -->
+  <section>
+    <div class="section-head">
+      <h2 style="font-size:1.1rem;">Available now</h2>
+      <span class="faint" style="font-size:0.82rem;" id="emResultCount"></span>
+    </div>
+    <div class="grid-restaurants" id="emGrid"><!-- injected by emergency.js --></div>
+  </section>
+
+</main>
+
+<!-- ============ MOBILE TAB BAR ============ -->
+<nav class="mobile-tabbar">
+  <a href="home.html" class="tabbar-item"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="hostel-essentials.html" class="tabbar-item"><i class="fa-solid fa-bag-shopping"></i>Essentials</a>
+  <a href="womens-essentials.html" class="tabbar-item"><i class="fa-solid fa-heart"></i>Private</a>
+  <a href="emergency.html" class="tabbar-item is-active"><i class="fa-solid fa-truck-medical"></i>Emergency</a>
+  <a href="profile.html" class="tabbar-item"><i class="fa-solid fa-user"></i>Profile</a>
+</nav>
+
+<script src="main.js"></script>
+<script src="emergency.js"></script>
+</body>
+</html>

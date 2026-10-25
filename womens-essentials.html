@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women's Essentials · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .we-main { padding: 28px 0 100px; display: flex; flex-direction: column; gap: 32px; }
+
+  /* ---- Locked state (shown to non-verified / male users) ---- */
+  .we-locked {
+    min-height: 60vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 14px; padding: 40px 20px;
+  }
+  .we-locked .lock-badge {
+    width: 78px; height: 78px; border-radius: 50%;
+    background: var(--primary-soft); color: var(--primary);
+    display: grid; place-items: center; font-size: 2rem;
+  }
+  .we-locked h2 { font-size: 1.3rem; max-width: 420px; }
+  .we-locked p { max-width: 420px; }
+
+  /* ---- Privacy hero ---- */
+  .we-hero {
+    border-radius: var(--r-xl);
+    background: linear-gradient(135deg, #7A3B69 0%, #4E1F42 100%);
+    color: #fff;
+    padding: 34px;
+    display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .we-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 100% at 100% 0%, rgba(255,255,255,0.16), transparent 60%);
+  }
+  .we-hero-text { position: relative; z-index: 1; max-width: 460px; }
+  .we-hero-text .eyebrow { color: #F3D9EC; }
+  .we-hero-text h1 { font-size: 1.6rem; margin: 6px 0 8px; }
+  .we-hero-text p { font-size: 0.9rem; opacity: 0.92; }
+  .we-hero-badges { display: flex; flex-wrap: wrap; gap: 10px; position: relative; z-index: 1; }
+  .we-hero-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 10px 14px; border-radius: var(--r-md);
+    font-size: 0.8rem; max-width: 190px;
+  }
+
+  /* ---- Privacy control toggles ---- */
+  .privacy-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .privacy-toggle {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 16px; border-radius: var(--r-md);
+  }
+  .privacy-toggle i.icon { color: var(--primary); font-size: 1.1rem; margin-top: 2px; }
+  .privacy-toggle .ptxt strong { display: block; font-size: 0.88rem; }
+  .privacy-toggle .ptxt span { font-size: 0.78rem; color: var(--ink-faint); }
+  .switch { position: relative; width: 42px; height: 24px; flex: 0 0 auto; margin-left: auto; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch .slider {
+    position: absolute; inset: 0; background: var(--border-strong); border-radius: var(--r-pill);
+    cursor: pointer; transition: background var(--t-fast);
+  }
+  .switch .slider::before {
+    content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px;
+    background: #fff; border-radius: 50%; transition: transform var(--t-fast);
+  }
+  .switch input:checked + .slider { background: var(--primary); }
+  .switch input:checked + .slider::before { transform: translateX(18px); }
+
+  /* ---- Product grid ---- */
+  .we-cover {
+    height: 128px; background-size: cover; background-position: center;
+    position: relative; display: flex; align-items: flex-start; justify-content: space-between; padding: 12px;
+  }
+  .we-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.28));
+  }
+  .we-cover > * { position: relative; z-index: 1; }
+  .we-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .we-name { font-family: var(--font-display); font-weight: 700; font-size: 0.94rem; }
+  .we-tags { font-size: 0.76rem; color: var(--ink-faint); }
+  .we-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .we-price { font-family: var(--font-mono); font-weight: 600; }
+  .we-add-btn {
+    border: none; background: var(--primary); color: #fff;
+    padding: 7px 14px; border-radius: var(--r-pill); font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: transform var(--t-fast);
+  }
+  .we-add-btn:active { transform: scale(0.94); }
+
+  .discreet-note {
+    display: flex; gap: 10px; align-items: center;
+    background: var(--primary-soft); color: var(--primary-dark);
+    padding: 12px 16px; border-radius: var(--r-md); font-size: 0.82rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<!-- ============ APP NAV ============ -->
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link is-active"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-chip"><i class="fa-solid fa-wallet"></i> ₹<span id="walletAmount">450</span></span>
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap we-main" id="weMain">
+
+  <!-- ============ LOCKED STATE (populated by JS if user isn't verified) ============ -->
+  <div class="we-locked" id="weLocked" style="display:none;">
+    <div class="lock-badge"><i class="fa-solid fa-lock"></i></div>
+    <h2 id="lockedTitle">This is a private space</h2>
+    <p class="muted" id="lockedMsg">
+      Women's Essentials is a private ordering space reserved for verified women students.
+    </p>
+    <a href="home.html" class="btn btn-primary">Back to Home</a>
+  </div>
+
+  <!-- ============ UNLOCKED CONTENT ============ -->
+  <div id="weContent" style="display:none; flex-direction: column; gap: 32px;">
+
+    <!-- ============ HERO ============ -->
+    <section class="we-hero fade-up">
+      <div class="we-hero-text">
+        <p class="eyebrow">Private · Discreet · Verified-only</p>
+        <h1>Women's Essentials</h1>
+        <p>Order hygiene, wellness, and safety essentials with total discretion — plain packaging, no product names on the label, and delivery only through verified partners.</p>
+      </div>
+      <div class="we-hero-badges">
+        <div class="we-hero-badge"><i class="fa-solid fa-box"></i> Sealed in a plain, unmarked box</div>
+        <div class="we-hero-badge"><i class="fa-solid fa-user-shield"></i> Handled by ID-verified delivery partners only</div>
+        <div class="we-hero-badge"><i class="fa-solid fa-eye-slash"></i> Hidden from shared order history by default</div>
+      </div>
+    </section>
+
+    <div class="discreet-note">
+      <i class="fa-solid fa-circle-info"></i>
+      Every order here ships in generic CampusGo packaging labeled only "Personal Care Order" — nothing on the outside indicates contents.
+    </div>
+
+    <!-- ============ PRIVACY CONTROLS ============ -->
+    <section>
+      <div class="section-head"><h2 style="font-size:1.1rem;">Your privacy controls</h2></div>
+      <div class="privacy-controls">
+        <div class="privacy-toggle card">
+          <i class="fa-solid fa-box icon"></i>
+          <div class="ptxt"><strong>Discreet packaging</strong><span>Plain box, no branding or product names</span></div>
+          <label class="switch"><input type="checkbox" id="toggleDiscreet" checked><span class="slider"></span></label>
+        </div>
+        <div class="privacy-toggle card">
+          <i class="fa-solid fa-clock-rotate-left icon"></i>
+          <div class="ptxt"><strong>Hide from shared order history</strong><span>Roommates on a joint account won't see these orders</span></div>
+          <label class="switch"><input type="checkbox" id="toggleHideHistory" checked><span class="slider"></span></label>
+        </div>
+        <div class="privacy-toggle card">
+          <i class="fa-solid fa-comment-slash icon"></i>
+          <div class="ptxt"><strong>Silent delivery</strong><span>No call, just a quiet knock or doorbell</span></div>
+          <label class="switch"><input type="checkbox" id="toggleSilent"><span class="slider"></span></label>
+        </div>
+        <div class="privacy-toggle card">
+          <i class="fa-solid fa-user-check icon"></i>
+          <div class="ptxt"><strong>Notify a trusted contact</strong><span>Alert a friend when the order is delivered</span></div>
+          <label class="switch"><input type="checkbox" id="toggleTrustedContact"><span class="slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CATEGORIES ============ -->
+    <section>
+      <div class="section-head"><h2 style="font-size:1.1rem;">Categories</h2></div>
+      <div class="category-scroll" id="weCategoryScroll">
+        <button class="category-chip is-active" data-cat="all"><i class="fa-solid fa-border-all"></i>All</button>
+        <button class="category-chip" data-cat="period"><i class="fa-solid fa-droplet"></i>Period Care</button>
+        <button class="category-chip" data-cat="hygiene"><i class="fa-solid fa-hand-sparkles"></i>Hygiene</button>
+        <button class="category-chip" data-cat="wellness"><i class="fa-solid fa-spa"></i>Wellness</button>
+        <button class="category-chip" data-cat="safety"><i class="fa-solid fa-shield-heart"></i>Safety</button>
+      </div>
+    </section>
+
+    <!-- ============ PRODUCTS ============ -->
+    <section>
+      <div class="section-head">
+        <h2 style="font-size:1.1rem;">Available now</h2>
+        <span class="faint" style="font-size:0.82rem;" id="weResultCount"></span>
+      </div>
+      <div class="grid-restaurants" id="weGrid"><!-- injected by womens-essentials.js --></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ============ MOBILE TAB BAR ============ -->
+<nav class="mobile-tabbar">
+  <a href="home.html" class="tabbar-item"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="hostel-essentials.html" class="tabbar-item"><i class="fa-solid fa-bag-shopping"></i>Essentials</a>
+  <a href="womens-essentials.html" class="tabbar-item is-active"><i class="fa-solid fa-heart"></i>Private</a>
+  <a href="partner-landing.html" class="tabbar-item"><i class="fa-solid fa-motorcycle"></i>Earn</a>
+  <a href="profile.html" class="tabbar-item"><i class="fa-solid fa-user"></i>Profile</a>
+</nav>
+
+<script src="main.js"></script>
+<script src="womens-essentials.js"></script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ---------------------------------- */
+  /* Page-specific: live tracking        */
+  /* ---------------------------------- */
+  .track-main { padding: 28px 0 100px; display: flex; flex-direction: column; gap: 20px; }
+
+  .track-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .track-head h1 { font-size: 1.5rem; }
+  .order-id { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); }
+
+  /* Layout: map + side panel */
+  .track-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 880px) { .track-layout { grid-template-columns: 1fr; } }
+
+  /* ---- Map card ---- */
+  .map-card { padding: 0; overflow: hidden; position: relative; }
+  .map-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .map-card-head .eta-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--primary-soft); color: var(--primary);
+    padding: 7px 14px; border-radius: var(--r-pill);
+    font-family: var(--font-mono); font-weight: 600; font-size: 0.85rem;
+  }
+  [data-theme="dark"] .map-card-head .eta-pill { color: var(--primary); }
+  .eta-pill i { font-size: 0.8rem; }
+
+  .map-card-actions {
+    display: flex; justify-content: flex-end;
+    padding: 10px 20px; border-bottom: 1px solid var(--border);
+    background: var(--bg-sunken);
+  }
+  .map-card-actions .btn[disabled] { opacity: 0.6; }
+
+  .map-wrap { position: relative; background: var(--bg-sunken); aspect-ratio: 16/11.5; }
+  .map-wrap svg { width: 100%; height: 100%; display: block; }
+
+  /* legend */
+  .map-legend {
+    position: absolute; bottom: 12px; left: 12px;
+    display: flex; gap: 12px; flex-wrap: wrap; max-width: calc(100% - 24px);
+    background: var(--glass-bg); backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 8px 12px; border-radius: var(--r-md);
+    font-size: 0.68rem; font-weight: 600; color: var(--ink-soft);
+  }
+  .map-legend span { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .map-legend i.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* moving partner marker */
+  .partner-marker {
+    filter: drop-shadow(0 4px 8px rgba(16,25,23,0.3));
+  }
+  .partner-marker .pm-pulse {
+    animation: pmPulse 1.8s ease-out infinite;
+    transform-origin: center;
+  }
+  @keyframes pmPulse {
+    0%   { r: 10; opacity: 0.55; }
+    100% { r: 26; opacity: 0; }
+  }
+  .partner-marker.is-arriving .pm-pulse { animation-duration: 0.9s; }
+  .partner-marker.is-arriving .pm-body { animation: pmBob 0.5s ease-in-out infinite alternate; }
+  @keyframes pmBob { from { transform: translateY(0); } to { transform: translateY(-2px); } }
+
+  .drop-marker { filter: drop-shadow(0 3px 6px rgba(16,25,23,0.25)); }
+  .drop-marker.is-lit .drop-ring { animation: dropLit 1.2s var(--ease-out) infinite; }
+  @keyframes dropLit {
+    0%   { r: 9;  opacity: 0.9; }
+    100% { r: 22; opacity: 0; }
+  }
+
+  .route-dash { stroke-dasharray: 6 7; }
+  .route-progress {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: var(--route-offset, 1000);
+    transition: stroke-dashoffset 0.9s linear;
+  }
+
+  /* ---- Status stepper (built on the shared .route-rail motif) ---- */
+  .status-card { padding: 24px 20px 30px; }
+  .status-rail-wrap { padding: 6px 6px 0; }
+  .status-rail-wrap .route-rail { max-width: 100%; }
+  .status-rail-wrap .route-label { font-size: 0.66rem; }
+
+  .arrived-banner {
+    display: none; align-items: center; gap: 10px;
+    background: var(--primary-soft); color: var(--primary);
+    border-radius: var(--r-md); padding: 12px 14px; margin-top: 22px;
+    font-weight: 600; font-size: 0.88rem;
+  }
+  .arrived-banner.is-shown { display: flex; }
+  .arrived-banner i { font-size: 1.1rem; }
+
+  /* ---- Partner card ---- */
+  .partner-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; }
+  .partner-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: grid; place-items: center; font-family: var(--font-display);
+    font-weight: 700; font-size: 1.15rem; flex: 0 0 auto;
+  }
+  .partner-info { flex: 1; min-width: 0; }
+  .partner-info h3 { font-size: 0.98rem; }
+  .partner-info .p-meta { font-size: 0.78rem; color: var(--ink-faint); margin-top: 2px; }
+  .partner-info .p-meta i.fa-star { color: var(--accent); }
+  .partner-actions { display: flex; gap: 8px; }
+  .partner-actions .nav-icon-btn { background: var(--bg-sunken); }
+
+  /* ---- ETA stat row ---- */
+  .stat-mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-mini {
+    background: var(--bg-sunken); border-radius: var(--r-md);
+    padding: 14px 16px; text-align: center;
+  }
+  .stat-mini .val {
+    font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.02em;
+  }
+  .stat-mini .lbl { font-size: 0.7rem; color: var(--ink-faint); margin-top: 2px; }
+  .stat-mini.is-ticking .val { color: var(--primary); }
+
+  /* ---- Order summary ---- */
+  .order-line-item {
+    display: flex; justify-content: space-between; font-size: 0.85rem;
+    padding: 9px 0; border-bottom: 1px dashed var(--border);
+  }
+  .order-line-item:last-of-type { border-bottom: none; }
+  .order-line-item span:first-child { color: var(--ink-soft); }
+
+  .side-col { display: flex; flex-direction: column; gap: 20px; }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<!-- ============ APP NAV ============ -->
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-chip"><i class="fa-solid fa-wallet"></i> ₹<span id="walletAmount">450</span></span>
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap track-main">
+
+  <div class="track-head fade-up">
+    <div>
+      <h1>Your order is on the way</h1>
+      <span class="order-id">Order #CG-48213 · Placed at 8:42 PM</span>
+    </div>
+    <a href="home.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-arrow-left"></i> Back home</a>
+  </div>
+
+  <div class="track-layout">
+
+    <!-- ================= MAP ================= -->
+    <div class="card map-card fade-up">
+      <div class="map-card-head">
+        <strong style="font-family:var(--font-display); font-size:0.95rem;">
+          <i class="fa-solid fa-route" style="color:var(--primary); margin-right:6px;"></i>Live location
+        </strong>
+        <span class="eta-pill"><i class="fa-solid fa-clock"></i> <span id="etaPillText">7 min away</span></span>
+      </div>
+
+      <div class="map-card-actions">
+        <button class="btn btn-accent btn-sm" id="previewArrivalBtn" type="button">
+          <i class="fa-solid fa-forward"></i> Preview approach
+        </button>
+      </div>
+
+      <div class="map-wrap">
+        <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg" aria-label="Campus delivery map">
+          <defs>
+            <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#EAF2EC"/>
+              <stop offset="100%" stop-color="#DCEAE1"/>
+            </linearGradient>
+          </defs>
+
+          <!-- ground -->
+          <rect x="0" y="0" width="700" height="500" fill="url(#ground)"/>
+
+          <!-- green / pedestrian zones (schematic, inspired by campus layout) -->
+          <ellipse cx="350" cy="250" rx="120" ry="90" fill="#BFE3C6" opacity="0.7"/>
+          <rect x="40" y="360" width="150" height="100" rx="10" fill="#CDEAD1"/>
+          <rect x="500" y="60" width="150" height="90" rx="10" fill="#CDEAD1"/>
+
+          <!-- main road (National Highway style, left edge) -->
+          <rect x="0" y="0" width="26" height="500" fill="#B9C0BC"/>
+          <line x1="13" y1="0" x2="13" y2="500" stroke="#fff" stroke-width="2" stroke-dasharray="10 8"/>
+
+          <!-- internal motorable roads -->
+          <path d="M26,120 H660" stroke="#B9C0BC" stroke-width="14" fill="none"/>
+          <path d="M120,20 V480" stroke="#B9C0BC" stroke-width="14" fill="none"/>
+          <path d="M26,380 H660" stroke="#B9C0BC" stroke-width="14" fill="none"/>
+
+          <!-- academic blocks -->
+          <rect x="150" y="45" width="80" height="55" rx="6" fill="#F2A93B"/>
+          <rect x="260" y="45" width="70" height="55" rx="6" fill="#F2A93B"/>
+          <rect x="420" y="45" width="90" height="55" rx="6" fill="#F2A93B"/>
+          <rect x="150" y="150" width="70" height="55" rx="6" fill="#F2A93B"/>
+
+          <!-- seminar halls (indigo) -->
+          <rect x="300" y="150" width="55" height="45" rx="6" fill="#5B5FA6"/>
+          <rect x="365" y="150" width="55" height="45" rx="6" fill="#5B5FA6"/>
+
+          <!-- library / academic block near center -->
+          <rect x="300" y="215" width="100" height="70" rx="8" fill="#F2A93B"/>
+          <text x="350" y="255" text-anchor="middle" font-size="11" font-family="Inter, sans-serif" fill="#fff" font-weight="700">LIBRARY</text>
+
+          <!-- food court -->
+          <rect x="150" y="300" width="90" height="55" rx="8" fill="#E85D75"/>
+          <text x="195" y="332" text-anchor="middle" font-size="10" font-family="Inter, sans-serif" fill="#fff" font-weight="700">FOOD</text>
+          <text x="195" y="344" text-anchor="middle" font-size="10" font-family="Inter, sans-serif" fill="#fff" font-weight="700">COURT</text>
+
+          <!-- hostel blocks (residential, marigold) -->
+          <rect x="470" y="200" width="70" height="150" rx="8" fill="#F2C14E"/>
+          <rect x="555" y="220" width="60" height="110" rx="8" fill="#F2C14E"/>
+          <text x="505" y="278" text-anchor="middle" font-size="10" font-family="Inter, sans-serif" fill="#5c4400" font-weight="700">HOSTEL</text>
+          <text x="505" y="292" text-anchor="middle" font-size="10" font-family="Inter, sans-serif" fill="#5c4400" font-weight="700">BLOCK C</text>
+
+          <!-- parking -->
+          <rect x="40" y="200" width="55" height="50" rx="6" fill="#9AA39D"/>
+
+          <!-- gate -->
+          <rect x="0" y="230" width="26" height="40" fill="#101917"/>
+
+          <!-- delivery route: food court -> hostel block C -->
+          <path id="routePath"
+                d="M 195 300
+                   L 195 200
+                   L 300 200
+                   Q 350 200 350 165
+                   L 350 130
+                   L 470 130
+                   L 470 260
+                   L 505 260"
+                fill="none" stroke="var(--border-strong)" stroke-width="4" class="route-dash"/>
+          <path id="routeProgressPath"
+                d="M 195 300
+                   L 195 200
+                   L 300 200
+                   Q 350 200 350 165
+                   L 350 130
+                   L 470 130
+                   L 470 260
+                   L 505 260"
+                fill="none" stroke="var(--primary)" stroke-width="4" class="route-progress"/>
+
+          <!-- pickup marker -->
+          <g transform="translate(195,300)">
+            <circle r="9" fill="#E85D75"/>
+            <circle r="3.5" fill="#fff"/>
+          </g>
+
+          <!-- drop marker -->
+          <g class="drop-marker is-lit" transform="translate(505,260)" id="dropMarker">
+            <circle class="drop-ring" r="9" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <path d="M0,-16 C8,-16 14,-10 14,-2 C14,10 0,20 0,20 C0,20 -14,10 -14,-2 C-14,-10 -8,-16 0,-16 Z" fill="var(--primary)"/>
+            <circle cy="-3" r="4.5" fill="#fff"/>
+          </g>
+
+          <!-- moving partner marker (position set by JS) -->
+          <g class="partner-marker" id="partnerMarker" transform="translate(195,300)">
+            <circle class="pm-pulse" r="10" fill="var(--primary)"/>
+            <g class="pm-body">
+              <circle r="12" fill="var(--primary)"/>
+              <text x="0" y="4" text-anchor="middle" font-size="12" fill="#fff">
+                <tspan font-family="'Font Awesome 6 Free'"></tspan>
+              </text>
+              <path d="M-5,3 L-2,-4 L2,-4 L1,0 L5,0 L-1,7 L0,3 Z" fill="#fff" transform="scale(0.85)"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="map-legend">
+          <span><i class="dot" style="background:#F2A93B;"></i>Academic</span>
+          <span><i class="dot" style="background:#F2C14E;"></i>Hostel</span>
+          <span><i class="dot" style="background:#5B5FA6;"></i>Seminar Hall</span>
+          <span><i class="dot" style="background:#E85D75;"></i>Food Court</span>
+          <span><i class="dot" style="background:#9AA39D;"></i>Parking</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SIDE PANEL ================= -->
+    <div class="side-col">
+
+      <!-- ETA + distance -->
+      <div class="card fade-up" style="padding:20px;">
+        <div class="stat-mini-row">
+          <div class="stat-mini is-ticking">
+            <div class="val" id="etaMinutes">7:00</div>
+            <div class="lbl">Time remaining</div>
+          </div>
+          <div class="stat-mini">
+            <div class="val" id="distanceLeft">640 m</div>
+            <div class="lbl">Distance left</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery partner -->
+      <div class="card partner-card fade-up">
+        <div class="partner-avatar">RM</div>
+        <div class="partner-info">
+          <h3>Rohit Mehta</h3>
+          <div class="p-meta"><i class="fa-solid fa-star"></i> 4.8 · Splendor+ · PB65 CG 4471</div>
+        </div>
+        <div class="partner-actions">
+          <button class="nav-icon-btn" aria-label="Call partner"><i class="fa-solid fa-phone"></i></button>
+          <button class="nav-icon-btn" aria-label="Message partner"><i class="fa-solid fa-comment-dots"></i></button>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="card status-card fade-up">
+        <h3 style="font-size:0.95rem; margin-bottom:18px;">Order status</h3>
+        <div class="status-rail-wrap">
+          <div class="route-rail" id="statusRail">
+            <div class="route-step is-done" data-step="0">
+              <div class="route-node"><i class="fa-solid fa-check" style="font-size:0.7rem;"></i></div>
+              <span class="route-label">Placed</span>
+            </div>
+            <div class="route-line" id="line0"></div>
+            <div class="route-step is-done" data-step="1">
+              <div class="route-node"><i class="fa-solid fa-check" style="font-size:0.7rem;"></i></div>
+              <span class="route-label">Preparing</span>
+            </div>
+            <div class="route-line" id="line1"></div>
+            <div class="route-step is-active" data-step="2">
+              <div class="route-node">3</div>
+              <span class="route-label">On the way</span>
+            </div>
+            <div class="route-line" id="line2"></div>
+            <div class="route-step" data-step="3">
+              <div class="route-node">4</div>
+              <span class="route-label">Arrived</span>
+            </div>
+          </div>
+        </div>
+        <div class="arrived-banner" id="arrivedBanner">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Rohit has arrived at Hostel Block C. Enjoy!</span>
+        </div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="card fade-up" style="padding:18px 20px;">
+        <h3 style="font-size:0.95rem; margin-bottom:6px;">Order summary</h3>
+        <div class="order-line-item"><span>Veg Fried Rice x1</span><span>₹120</span></div>
+        <div class="order-line-item"><span>Cold Coffee x1</span><span>₹70</span></div>
+        <div class="order-line-item"><span>Delivery fee</span><span>₹15</span></div>
+        <div class="order-line-item" style="font-weight:700; color:var(--ink);"><span>Total</span><span>₹205</span></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="main.js"></script>
+<script src="track-order.js"></script>
+</body>
+</html>

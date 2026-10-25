@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hostel Essentials · CampusGo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .he-main { padding: 28px 0 100px; display: flex; flex-direction: column; gap: 32px; }
+
+  .he-hero {
+    border-radius: var(--r-xl);
+    background: linear-gradient(135deg, #1B4D6E 0%, #0F2E45 100%);
+    color: #fff;
+    padding: 34px;
+    display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .he-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 100% at 100% 0%, rgba(255,255,255,0.16), transparent 60%);
+  }
+  .he-hero-text { position: relative; z-index: 1; max-width: 460px; }
+  .he-hero-text .eyebrow { color: #BFE0F5; }
+  .he-hero-text h1 { font-size: 1.6rem; margin: 6px 0 8px; }
+  .he-hero-text p { font-size: 0.9rem; opacity: 0.92; }
+  .he-hero-badges { display: flex; flex-wrap: wrap; gap: 10px; position: relative; z-index: 1; }
+  .he-hero-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 10px 14px; border-radius: var(--r-md);
+    font-size: 0.8rem; max-width: 200px;
+  }
+
+  .he-cover {
+    height: 128px; background-size: cover; background-position: center;
+    position: relative; display: flex; align-items: flex-start; justify-content: space-between; padding: 12px;
+  }
+  .he-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.28));
+    z-index: 1;
+  }
+  .he-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .he-cover > * { position: relative; z-index: 1; }
+  .he-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .he-name { font-family: var(--font-display); font-weight: 700; font-size: 0.94rem; }
+  .he-tags { font-size: 0.76rem; color: var(--ink-faint); }
+  .he-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .he-price { font-family: var(--font-mono); font-weight: 600; }
+  .he-add-btn {
+    border: none; background: var(--primary); color: #fff;
+    padding: 7px 14px; border-radius: var(--r-pill); font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: transform var(--t-fast);
+  }
+  .he-add-btn:active { transform: scale(0.94); }
+
+  .he-note {
+    display: flex; gap: 10px; align-items: center;
+    background: var(--primary-soft); color: var(--primary-dark);
+    padding: 12px 16px; border-radius: var(--r-md); font-size: 0.82rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-loader"><div class="loader-mark">CG</div></div>
+
+<!-- ============ APP NAV ============ -->
+<nav class="app-nav">
+  <div class="wrap">
+    <span class="brand"><span class="brand-badge">CG</span>CampusGo</span>
+    <div class="app-nav-links">
+      <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="hostel-essentials.html" class="nav-link is-active"><i class="fa-solid fa-bag-shopping"></i> Hostel Essentials</a>
+      <a href="womens-essentials.html" class="nav-link"><i class="fa-solid fa-heart"></i> Women's Essentials</a>
+      <a href="partner-landing.html" class="nav-link nav-link-accent"><i class="fa-solid fa-motorcycle"></i> Become a Partner</a>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-chip"><i class="fa-solid fa-wallet"></i> ₹<span id="walletAmount">450</span></span>
+      <button class="nav-icon-btn" data-action="toggle-theme" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" data-theme-icon></i>
+      </button>
+      <div class="avatar" id="navAvatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap he-main" id="heMain">
+
+  <!-- ============ HERO ============ -->
+  <section class="he-hero fade-up">
+    <div class="he-hero-text">
+      <p class="eyebrow">Room & block delivery</p>
+      <h1>Hostel Essentials</h1>
+      <p>Toiletries, stationery, bedding, snacks, and everyday hostel-life items — delivered straight to your room or block reception in under 30 minutes.</p>
+    </div>
+    <div class="he-hero-badges">
+      <div class="he-hero-badge"><i class="fa-solid fa-door-open"></i> Delivered to your room or block gate</div>
+      <div class="he-hero-badge"><i class="fa-solid fa-clock"></i> Most orders in 20–30 minutes</div>
+      <div class="he-hero-badge"><i class="fa-solid fa-indian-rupee-sign"></i> Pay by wallet, UPI, or cash</div>
+    </div>
+  </section>
+
+  <div class="he-note">
+    <i class="fa-solid fa-circle-info"></i>
+    Orders placed after 10 PM are delivered to your hostel's night reception desk per campus curfew rules.
+  </div>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section>
+    <div class="section-head"><h2 style="font-size:1.1rem;">Categories</h2></div>
+    <div class="category-scroll" id="heCategoryScroll">
+      <button class="category-chip is-active" data-cat="all"><i class="fa-solid fa-border-all"></i>All</button>
+      <button class="category-chip" data-cat="toiletries"><i class="fa-solid fa-pump-soap"></i>Toiletries</button>
+      <button class="category-chip" data-cat="stationery"><i class="fa-solid fa-pen"></i>Stationery</button>
+      <button class="category-chip" data-cat="bedding"><i class="fa-solid fa-bed"></i>Bedding</button>
+      <button class="category-chip" data-cat="snacks"><i class="fa-solid fa-cookie-bite"></i>Snacks</button>
+      <button class="category-chip" data-cat="electronics"><i class="fa-solid fa-plug"></i>Electronics</button>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCTS ============ -->
+  <section>
+    <div class="section-head">
+      <h2 style="font-size:1.1rem;">Available now</h2>
+      <span class="faint" style="font-size:0.82rem;" id="heResultCount"></span>
+    </div>
+    <div class="grid-restaurants" id="heGrid"><!-- injected by hostel-essentials.js --></div>
+  </section>
+
+</main>
+
+<!-- ============ MOBILE TAB BAR ============ -->
+<nav class="mobile-tabbar">
+  <a href="home.html" class="tabbar-item"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="hostel-essentials.html" class="tabbar-item is-active"><i class="fa-solid fa-bag-shopping"></i>Essentials</a>
+  <a href="womens-essentials.html" class="tabbar-item"><i class="fa-solid fa-heart"></i>Private</a>
+  <a href="partner-landing.html" class="tabbar-item"><i class="fa-solid fa-motorcycle"></i>Earn</a>
+  <a href="profile.html" class="tabbar-item"><i class="fa-solid fa-user"></i>Profile</a>
+</nav>
+
+<script src="main.js"></script>
+<script src="hostel-essentials.js"></script>
+</body>
+</html>
